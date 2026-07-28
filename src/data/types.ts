@@ -16,6 +16,8 @@ export interface Seller {
   city: string;
   rating: number; // 0–5
   sales: number;
+  verified?: boolean;
+  followers?: number;
 }
 
 export interface Listing {
@@ -35,12 +37,18 @@ export interface Listing {
   likes: number;
   status: ListingStatus;
   createdAgo: string;
+  brand?: string;
+  hashtags?: string[];
+  mrpINR?: number;
+  boosted?: boolean;
 }
 
 export interface Msg {
   from: MsgSender;
   text: string;
   timeAgo: string;
+  kind?: 'text' | 'offer';
+  offerId?: string;
 }
 
 export interface Thread {
@@ -50,11 +58,101 @@ export interface Thread {
   messages: Msg[];
 }
 
+// Superset of the original single-value 'placed' status — existing Orders
+// (and the old placeOrder()) remain valid values of this type.
+export type OrderStatus =
+  | 'placed'
+  | 'packed'
+  | 'shipped'
+  | 'out_for_delivery'
+  | 'delivered'
+  | 'return_requested'
+  | 'refunded'
+  | 'cancelled';
+
+export interface TrackingEvent {
+  status: OrderStatus;
+  label: string;
+  city?: string;
+  at: number;
+}
+
 export interface Order {
   id: string;
   listingId: string;
-  status: 'placed';
+  status: OrderStatus;
   payMethod: PayMethod;
+  addressSnapshot?: Address;
+  courierId?: string;
+  courierName?: string;
+  etaDays?: number;
+  itemINR?: number;
+  protectionFeeINR?: number;
+  shippingFeeINR?: number;
+  codFeeINR?: number;
+  totalINR?: number;
+  awb?: string;
+  placedAt?: number;
+  timeline?: TrackingEvent[];
+  returnReason?: string;
+}
+
+export interface Review {
+  id: string;
+  sellerId: string;
+  orderId?: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  text: string;
+  reviewerName: string;
+  timeAgo: string;
+}
+
+export interface Offer {
+  id: string;
+  listingId: string;
+  threadId: string;
+  amountINR: number;
+  by: 'me' | 'peer';
+  status: 'pending' | 'accepted' | 'declined' | 'countered';
+  counterINR?: number;
+  timeAgo: string;
+}
+
+export interface Address {
+  id: string;
+  fullName: string;
+  phone: string;
+  line1: string;
+  line2?: string;
+  landmark?: string;
+  pincode: string;
+  city: string;
+  state: string;
+  isDefault?: boolean;
+}
+
+export interface Notification {
+  id: string;
+  kind: 'like' | 'offer' | 'order' | 'message' | 'system';
+  text: string;
+  refPath: string;
+  read: boolean;
+  at: number;
+}
+
+export interface CourierQuote {
+  id: string;
+  name: string;
+  etaDays: number;
+  feeINR: number;
+  codAvailable: boolean;
+}
+
+export interface Serviceability {
+  serviceable: boolean;
+  city?: string;
+  state?: string;
+  codAvailable?: boolean;
 }
 
 // Browser-local demo auth (email or mobile + password, PBKDF2-hashed in
