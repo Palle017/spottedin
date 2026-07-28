@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ListingCard from '../components/ListingCard';
 import EmptyState from '../components/EmptyState';
 import { getFeed, searchListings, subscribe } from '../data/store';
@@ -15,7 +15,8 @@ const SHORTCUTS: { key: Category; label: string }[] = [
 ];
 
 export default function Search() {
-  const [query, setQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get('tag') ?? searchParams.get('q') ?? '');
   const [tick, setTick] = useState(0);
   const navigate = useNavigate();
 

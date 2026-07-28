@@ -469,7 +469,7 @@ export default function ListingDetail() {
         <p className="listing-detail__desc">{listing.description}</p>
 
         <Link to={`/seller/${seller.id}`} className="listing-detail__seller">
-          <Avatar emoji={seller.avatarEmoji} size={44} />
+          <Avatar emoji={seller.avatarEmoji} size={44} verified={seller.verified} />
           <div className="listing-detail__seller-info">
             <div className="listing-detail__seller-name-row">
               <span className="listing-detail__seller-name">{seller.name}</span>

@@ -190,7 +190,7 @@ export function searchListings(q: string): Listing[] {
 
   return readListings().filter((l) => {
     const seller = getSeller(l.sellerId);
-    const haystack = [l.title, l.category, l.condition, seller?.handle ?? '']
+    const haystack = [l.title, l.category, l.condition, l.brand ?? '', seller?.handle ?? '', ...(l.hashtags ?? [])]
       .join(' ')
       .toLowerCase();
     return haystack.includes(query);

@@ -68,7 +68,7 @@ export default function SellerProfile() {
       <TopBar title={seller.handle} />
 
       <div className="seller-profile__header">
-        <Avatar emoji={seller.avatarEmoji} size={72} />
+        <Avatar emoji={seller.avatarEmoji} size={72} verified={seller.verified} />
         <h2 className="seller-profile__name">{seller.name}</h2>
         <p className="seller-profile__handle">{seller.handle}</p>
         <p className="seller-profile__bio">{seller.bio}</p>

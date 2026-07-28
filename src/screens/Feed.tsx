@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ListingCard from '../components/ListingCard';
 import EmptyState from '../components/EmptyState';
+import SkeletonGrid from '../components/Skeleton';
 import { getFeed, getUser, subscribe } from '../data/store';
 import { rankFeed } from '../data/curation';
 import type { Category } from '../data/types';
@@ -16,12 +17,33 @@ const CHIPS: { key: Category | 'all'; label: string }[] = [
   { key: 'vintage', label: 'Vintage' },
 ];
 
+function HeroStamp() {
+  return (
+    <svg className="feed__stamp" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+      <circle cx="26" cy="26" r="23.5" stroke="var(--brand-crimson)" strokeWidth="1.3" />
+      <circle cx="26" cy="26" r="18" stroke="var(--brand-crimson)" strokeWidth="1" strokeDasharray="1.4 3.2" />
+      <path
+        d="M17.5 26.6l5.6 5.6 11.4-12.2"
+        stroke="var(--brand-crimson)"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Feed() {
   const [active, setActive] = useState<Category | 'all'>('all');
   const [tick, setTick] = useState(0);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => subscribe(() => setTick((t) => t + 1)), []);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const user = useMemo(() => getUser(), [tick]);
 
@@ -34,34 +56,64 @@ export default function Feed() {
   return (
     <div className="feed">
       <style>{`
+        .feed__hero {
+          background: var(--cream);
+          padding: 22px 16px 16px;
+        }
+        .feed__hero-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+        }
+        .feed__wordmark {
+          font-family: var(--font-display);
+          font-size: 40px;
+          font-weight: 700;
+          line-height: 0.9;
+          letter-spacing: -0.01em;
+          color: var(--brand-crimson);
+        }
+        .feed__stamp {
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .feed__tagline {
+          font-family: var(--font-display);
+          font-style: italic;
+          font-size: 15px;
+          color: var(--ink);
+          margin-top: 8px;
+        }
+        .feed__value {
+          font-size: 12.5px;
+          line-height: 1.4;
+          color: var(--ink-2);
+          margin-top: 6px;
+          max-width: 320px;
+        }
+        .feed__scallop {
+          height: 10px;
+          background-color: var(--cream);
+          background-image: radial-gradient(circle at 6px 6px, var(--surface) 6px, transparent 6.5px);
+          background-size: 12px 10px;
+          background-repeat: repeat-x;
+          background-position: bottom;
+        }
         .feed__header {
           position: sticky;
           top: 0;
           z-index: 10;
           background: var(--surface);
           border-bottom: 1px solid var(--hairline);
-          padding: 16px 16px 12px;
-        }
-        .feed__brand {
-          font-family: var(--font-display);
-          font-size: 22px;
-          font-weight: 700;
-          letter-spacing: -0.01em;
-          text-transform: uppercase;
-          color: var(--brand-crimson);
-          margin-bottom: 2px;
-        }
-        .feed__tagline {
-          font-size: 12px;
-          color: var(--ink-2);
-          margin-bottom: 12px;
+          padding: 12px 16px;
         }
         .feed__search {
           display: flex;
           align-items: center;
           gap: 8px;
           width: 100%;
-          height: 42px;
+          height: 46px;
           padding: 0 14px;
           margin-bottom: 12px;
           border: none;
@@ -90,7 +142,7 @@ export default function Feed() {
           flex-shrink: 0;
           border: none;
           background: none;
-          padding: 0 0 8px;
+          padding: 8px 0;
           font-size: 13px;
           font-weight: 500;
           color: var(--ink-2);
@@ -104,9 +156,17 @@ export default function Feed() {
         }
       `}</style>
 
+      <div className="feed__hero">
+        <div className="feed__hero-top">
+          <div className="feed__wordmark">SPOTTED</div>
+          <HeroStamp />
+        </div>
+        <div className="feed__tagline">Spotted it first.</div>
+        <p className="feed__value">Pre-loved fashion, sneakers &amp; finds — India&rsquo;s resale drop.</p>
+      </div>
+      <div className="feed__scallop" aria-hidden="true" />
+
       <div className="feed__header">
-        <div className="feed__brand">SPOTTED</div>
-        <div className="feed__tagline">Pre-loved. Re-loved.</div>
         <button type="button" className="feed__search" onClick={() => navigate('/search')}>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
@@ -128,8 +188,10 @@ export default function Feed() {
         </div>
       </div>
 
-      {listings.length === 0 ? (
-        <EmptyState emoji="🔍" title="Nothing here yet" subtitle="Try a different category." />
+      {loading ? (
+        <SkeletonGrid />
+      ) : listings.length === 0 ? (
+        <EmptyState title="Nothing here yet" subtitle="Try a different category." />
       ) : (
         <div className="listing-grid">
           {listings.map((listing) => (

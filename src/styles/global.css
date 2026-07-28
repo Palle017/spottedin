@@ -41,6 +41,14 @@ button {
   cursor: pointer;
 }
 
+a, button {
+  transition: transform 150ms ease, opacity 150ms ease, background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+a:active, button:active {
+  transform: scale(0.97);
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -120,7 +128,10 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
+  min-width: 48px;
+  min-height: 48px;
   font-size: 11px;
   font-weight: 600;
   color: var(--ink-2);
@@ -133,8 +144,11 @@ ul {
 }
 
 .bottom-nav__icon {
-  font-size: 20px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
 }
 
 .bottom-nav__sell {
@@ -146,7 +160,6 @@ ul {
   border-radius: 50%;
   background: var(--accent);
   color: #fff;
-  font-size: 22px;
   margin-top: -18px;
   box-shadow: var(--shadow-md);
   border: 3px solid var(--surface);
@@ -210,7 +223,7 @@ ul {
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
   opacity: 0.9;
 }
 
@@ -265,6 +278,12 @@ ul {
 
 /* ---- Shared components -------------------------------------------------- */
 
+.avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
 .avatar {
   display: flex;
   align-items: center;
@@ -275,6 +294,65 @@ ul {
   overflow: hidden;
   white-space: nowrap;
   line-height: 1;
+}
+
+.avatar__verified {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  display: flex;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.verified-stamp {
+  transform: rotate(-9deg);
+}
+
+/* ---- Skeleton loading -------------------------------------------------- */
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skeleton-card__tile {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-card__line {
+  height: 12px;
+  width: 70%;
+  border-radius: 4px;
+}
+
+.skeleton-card__line--short {
+  width: 40%;
+  height: 10px;
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: skeleton-shimmer 1.5s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .price-tag {
@@ -322,10 +400,10 @@ ul {
 
 .listing-card__like {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
+  bottom: 2px;
+  right: 2px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: transparent;
   padding: 0;
@@ -376,8 +454,8 @@ ul {
   color: var(--ink-2);
 }
 
-.empty-state__emoji {
-  font-size: 40px;
+.empty-state__art {
+  margin-bottom: 4px;
 }
 
 .empty-state__title {
