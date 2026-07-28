@@ -733,6 +733,7 @@ export async function placeOrderFull(input: {
   addressId: string;
   payMethod: PayMethod;
   courierId: string;
+  itemINR?: number;
 }): Promise<Order> {
   const listings = readListings();
   const listingIdx = listings.findIndex((l) => l.id === input.listingId);
@@ -747,7 +748,7 @@ export async function placeOrderFull(input: {
   const courier = couriers.find((c) => c.id === input.courierId);
   if (!courier) throw new Error('Selected courier is not available for this address');
 
-  const itemINR = listing.priceINR;
+  const itemINR = input.itemINR && input.itemINR > 0 ? Math.round(input.itemINR) : listing.priceINR;
   const protectionFeeINR = Math.max(15, Math.round(itemINR * 0.02));
   const shippingFeeINR = courier.feeINR;
   const codFeeINR = input.payMethod === 'cod' ? 40 : 0;
