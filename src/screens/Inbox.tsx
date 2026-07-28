@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
-import { getListing, getSeller, getThreads, subscribe } from '../data/store';
+import { getListing, getOffersForListing, getSeller, getThreads, subscribe } from '../data/store';
 import type { Thread } from '../data/types';
 import './Inbox.css';
 
@@ -30,6 +30,8 @@ export default function Inbox() {
           const listing = getListing(thread.listingId);
           const seller = getSeller(thread.peerId);
           const last = thread.messages[thread.messages.length - 1];
+          const hasActiveOffer = getOffersForListing(thread.listingId)
+            .some((o) => o.threadId === thread.id && (o.status === 'pending' || o.status === 'countered'));
 
           return (
             <li key={thread.id}>
@@ -50,7 +52,10 @@ export default function Inbox() {
                 </div>
                 <div className="inbox-row__body">
                   <div className="inbox-row__top">
-                    <span className="inbox-row__name">{seller?.name ?? 'Seller'}</span>
+                    <span className="inbox-row__name">
+                      {seller?.name ?? 'Seller'}
+                      {hasActiveOffer && <span className="inbox-row__offer-tag">Offer</span>}
+                    </span>
                     {last && <span className="inbox-row__time">{last.timeAgo}</span>}
                   </div>
                   {listing && <span className="inbox-row__listing">{listing.title}</span>}

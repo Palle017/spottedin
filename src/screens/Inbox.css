@@ -53,6 +53,21 @@
   white-space: nowrap;
 }
 
+.inbox-row__offer-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--warn);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  vertical-align: middle;
+}
+
 .inbox-row__time {
   font-size: 11px;
   color: var(--ink-2);
