@@ -1,0 +1,41 @@
+/* Design tokens — single source of truth for color/spacing/radius across the app. */
+:root {
+  /* grounds */
+  --bg: #FAF7F2;
+  --surface: #FFFFFF;
+  --cream: #F6F1E7;
+
+  /* ink */
+  --ink: #111111;
+  --ink-2: #767676;
+  --hairline: #E5E5E5;
+
+  /* reds — two reds, distinct roles */
+  --accent: #FF2300;
+  --brand-crimson: #8B162B;
+
+  /* semantic */
+  --good: #0A8A4A;
+  --warn: #C6862B;
+
+  /* muted secondary ramp — illustration + chip fills only, never on commerce UI */
+  --sage: #8D957E;
+  --slate: #5E657B;
+  --rose: #F9B6B8;
+  --butter: #F6F3CF;
+
+  /* type */
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: Georgia, 'Times New Roman', 'Playfair Display', serif;
+
+  /* geometry */
+  --radius: 14px;
+  --radius-sm: 8px;
+
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.06);
+  --shadow-md: 0 8px 24px rgba(17, 17, 17, 0.10);
+  --shadow-frame: 0 0 0 1px rgba(17, 17, 17, 0.04), 0 24px 60px rgba(17, 17, 17, 0.14);
+
+  --app-max-width: 480px;
+  --bottom-nav-height: 64px;
+}
