@@ -5,21 +5,41 @@ import Avatar from '../components/Avatar';
 import EmptyState from '../components/EmptyState';
 import ListingCard from '../components/ListingCard';
 import {
+  follow,
+  getOrCreateThreadForListing,
   getSeller,
   getSellerListings,
+  getSellerReviews,
   getUser,
+  isFollowing,
   logout,
   subscribe,
+  unfollow,
   updateMyProfile,
 } from '../data/store';
-import type { Listing, Seller } from '../data/types';
+import type { Listing, Review, Seller } from '../data/types';
 import './SellerProfile.css';
+
+type Tab = 'listings' | 'reviews';
+
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span className="review-card__stars" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <span key={i} className={i < rating ? 'is-filled' : ''}>★</span>
+      ))}
+    </span>
+  );
+}
 
 export default function SellerProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [seller, setSeller] = useState<Seller | undefined>(() => (id ? getSeller(id) : undefined));
   const [listings, setListings] = useState<Listing[]>(() => (id ? getSellerListings(id) : []));
+  const [reviews, setReviews] = useState<Review[]>(() => (id ? getSellerReviews(id) : []));
+  const [following, setFollowing] = useState(() => (id ? isFollowing(id) : false));
+  const [tab, setTab] = useState<Tab>('listings');
   const [editing, setEditing] = useState(false);
   const [profileError, setProfileError] = useState('');
 
@@ -27,9 +47,13 @@ export default function SellerProfile() {
     if (!id) return;
     setSeller(getSeller(id));
     setListings(getSellerListings(id));
+    setReviews(getSellerReviews(id));
+    setFollowing(isFollowing(id));
     return subscribe(() => {
       setSeller(getSeller(id));
       setListings(getSellerListings(id));
+      setReviews(getSellerReviews(id));
+      setFollowing(isFollowing(id));
     });
   }, [id]);
 
@@ -42,8 +66,8 @@ export default function SellerProfile() {
     );
   }
 
-  const liveCount = listings.filter((l) => l.status === 'live').length;
   const isOwnProfile = getUser()?.sellerId === seller.id;
+  const ratingTier = seller.rating >= 4 ? 'good' : seller.rating >= 3 ? 'warn' : 'neutral';
 
   function handleProfileSave(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,6 +87,18 @@ export default function SellerProfile() {
     }
   }
 
+  function handleFollowToggle() {
+    if (following) unfollow(seller!.id);
+    else follow(seller!.id);
+    setFollowing(!following);
+  }
+
+  function handleMessage() {
+    if (listings.length === 0) return;
+    const thread = getOrCreateThreadForListing(listings[0].id);
+    navigate(`/chat/${thread.id}`);
+  }
+
   return (
     <div className="seller-profile">
       <TopBar title={seller.handle} />
@@ -71,21 +107,23 @@ export default function SellerProfile() {
         <Avatar emoji={seller.avatarEmoji} size={72} verified={seller.verified} />
         <h2 className="seller-profile__name">{seller.name}</h2>
         <p className="seller-profile__handle">{seller.handle}</p>
-        <p className="seller-profile__bio">{seller.bio}</p>
-        <p className="seller-profile__city">📍 {seller.city}</p>
+        {seller.city && <p className="seller-profile__city">📍 {seller.city}</p>}
+        {seller.bio && <p className="seller-profile__bio">{seller.bio}</p>}
 
         <div className="seller-profile__stats">
           <div className="seller-profile__stat">
-            <span className="seller-profile__stat-value">⭐ {seller.rating.toFixed(1)}</span>
-            <span className="seller-profile__stat-label">Rating</span>
+            <span className="seller-profile__stat-value">{seller.followers ?? 0}</span>
+            <span className="seller-profile__stat-label">Followers</span>
           </div>
           <div className="seller-profile__stat">
             <span className="seller-profile__stat-value">{seller.sales}</span>
             <span className="seller-profile__stat-label">Sales</span>
           </div>
           <div className="seller-profile__stat">
-            <span className="seller-profile__stat-value">{liveCount}</span>
-            <span className="seller-profile__stat-label">Listed</span>
+            <span className={`seller-profile__rating-pill seller-profile__rating-pill--${ratingTier}`}>
+              ⭐ {seller.rating.toFixed(1)}
+            </span>
+            <span className="seller-profile__stat-label">{reviews.length} review{reviews.length === 1 ? '' : 's'}</span>
           </div>
         </div>
 
@@ -97,6 +135,9 @@ export default function SellerProfile() {
             <button type="button" className="btn btn-outline" onClick={() => navigate('/orders')}>
               My orders
             </button>
+            <button type="button" className="btn btn-outline" onClick={() => navigate('/likes')}>
+              Likes
+            </button>
             <button
               type="button"
               className="seller-profile__logout"
@@ -107,6 +148,23 @@ export default function SellerProfile() {
             >
               Log out
             </button>
+          </div>
+        )}
+
+        {!isOwnProfile && (
+          <div className="seller-profile__actions">
+            <button
+              type="button"
+              className={following ? 'btn btn-outline' : 'btn btn-primary'}
+              onClick={handleFollowToggle}
+            >
+              {following ? 'Following' : 'Follow'}
+            </button>
+            {listings.length > 0 && (
+              <button type="button" className="btn btn-outline" onClick={handleMessage}>
+                Message
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -143,12 +201,46 @@ export default function SellerProfile() {
         </form>
       )}
 
-      {listings.length === 0 ? (
-        <EmptyState emoji="📦" title="Nothing listed yet" subtitle="Items this seller lists will show up here." />
+      <div className="seller-profile__tabs">
+        <button
+          type="button"
+          className={`seller-profile__tab${tab === 'listings' ? ' is-active' : ''}`}
+          onClick={() => setTab('listings')}
+        >
+          Listings
+        </button>
+        <button
+          type="button"
+          className={`seller-profile__tab${tab === 'reviews' ? ' is-active' : ''}`}
+          onClick={() => setTab('reviews')}
+        >
+          Reviews · {reviews.length}
+        </button>
+      </div>
+
+      {tab === 'listings' ? (
+        listings.length === 0 ? (
+          <EmptyState emoji="📦" title="Nothing listed yet" subtitle="Items this seller lists will show up here." />
+        ) : (
+          <div className="listing-grid">
+            {listings.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        )
+      ) : reviews.length === 0 ? (
+        <EmptyState emoji="⭐" title="No reviews yet" subtitle="Reviews from buyers will show up here." />
       ) : (
-        <div className="listing-grid">
-          {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
+        <div className="seller-profile__reviews">
+          {reviews.map((review) => (
+            <div className="review-card" key={review.id}>
+              <div className="review-card__head">
+                <Stars rating={review.rating} />
+                <span className="review-card__time">{review.timeAgo}</span>
+              </div>
+              <p className="review-card__text">{review.text}</p>
+              <p className="review-card__name">{review.reviewerName}</p>
+            </div>
           ))}
         </div>
       )}

@@ -11,6 +11,7 @@ import Orders from './screens/Orders';
 import OrderDetail from './screens/OrderDetail';
 import Inbox from './screens/Inbox';
 import Chat from './screens/Chat';
+import Likes from './screens/Likes';
 import ClawPanel from './claw/ClawPanel';
 import { getUser, subscribe } from './data/store';
 
@@ -135,6 +136,7 @@ function AppShell() {
           <Route path="/orders/:id" element={<OrderDetail />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/chat/:id" element={<Chat />} />
+          <Route path="/likes" element={<Likes />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
