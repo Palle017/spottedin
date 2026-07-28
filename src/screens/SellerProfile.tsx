@@ -94,6 +94,9 @@ export default function SellerProfile() {
             <button type="button" className="btn btn-outline" onClick={() => setEditing(true)}>
               Edit profile
             </button>
+            <button type="button" className="btn btn-outline" onClick={() => navigate('/orders')}>
+              My orders
+            </button>
             <button
               type="button"
               className="seller-profile__logout"

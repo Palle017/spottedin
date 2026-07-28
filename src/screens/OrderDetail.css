@@ -1,0 +1,218 @@
+/* Order detail + tracking screen. */
+
+.order-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 24px;
+}
+
+.order-detail__header {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+}
+
+.order-detail__thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  overflow: hidden;
+}
+
+.order-detail__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order-detail__header-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+  min-width: 0;
+}
+
+.order-detail__title {
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-detail__meta {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.order-detail__section {
+  padding: 12px 16px;
+  border-top: 1px solid var(--hairline);
+}
+
+.order-detail__heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 12px;
+}
+
+/* ---- Tracking timeline ---- */
+
+.order-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-timeline__step {
+  position: relative;
+  padding: 0 0 20px 24px;
+}
+
+.order-timeline__step:last-child {
+  padding-bottom: 0;
+}
+
+.order-timeline__step::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--hairline);
+}
+
+.order-timeline__step::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 15px;
+  bottom: -6px;
+  width: 2px;
+  background: var(--hairline);
+}
+
+.order-timeline__step:last-child::after {
+  display: none;
+}
+
+.order-timeline__step.is-reached::before,
+.order-timeline__step.is-reached::after {
+  background: var(--good);
+}
+
+.order-timeline__step.is-current::before {
+  background: var(--ink);
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
+}
+
+.order-timeline__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.order-timeline__step.is-reached .order-timeline__label {
+  color: var(--ink);
+}
+
+.order-timeline__step.is-current .order-timeline__label {
+  font-weight: 700;
+}
+
+.order-timeline__meta {
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+
+/* ---- Address + payment cards ---- */
+
+.order-detail__card {
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-detail__address-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.order-detail__address-lines {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.order-detail__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.order-detail__row-label {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.order-detail__row-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.order-detail__row--total {
+  padding-top: 10px;
+  border-top: 1px dashed var(--hairline);
+}
+
+.order-detail__row--total .order-detail__row-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---- Actions ---- */
+
+.order-detail__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-detail__note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--warn);
+}
+
+.order-detail__return-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-detail__return-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.order-detail__error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--warn);
+}

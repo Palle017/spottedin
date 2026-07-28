@@ -7,6 +7,8 @@ import SellerProfile from './screens/SellerProfile';
 import CreateListing from './screens/CreateListing';
 import Login from './screens/Login';
 import Checkout from './screens/Checkout';
+import Orders from './screens/Orders';
+import OrderDetail from './screens/OrderDetail';
 import Inbox from './screens/Inbox';
 import Chat from './screens/Chat';
 import ClawPanel from './claw/ClawPanel';
@@ -16,6 +18,7 @@ import { getUser, subscribe } from './data/store';
 function showBottomNav(pathname: string): boolean {
   if (pathname.startsWith('/listing/')) return false;
   if (pathname.startsWith('/checkout/')) return false;
+  if (pathname.startsWith('/orders/')) return false;
   if (pathname.startsWith('/chat/')) return false;
   if (pathname === '/login') return false;
   return true;
@@ -128,6 +131,8 @@ function AppShell() {
           <Route path="/seller/:id" element={<SellerProfile />} />
           <Route path="/sell" element={<CreateListing />} />
           <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/chat/:id" element={<Chat />} />
           <Route path="/login" element={<Login />} />
