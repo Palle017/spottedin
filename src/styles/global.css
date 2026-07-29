@@ -42,11 +42,26 @@ button {
 }
 
 a, button {
-  transition: transform 150ms ease, opacity 150ms ease, background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  transition: transform 150ms ease, opacity 150ms ease, background-color 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 a:active, button:active {
   transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a, button, .skeleton-shimmer::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  a:active, button:active {
+    transform: none;
+  }
 }
 
 ul {
@@ -377,6 +392,8 @@ ul {
   aspect-ratio: 4 / 5;
   position: relative;
   overflow: hidden;
+  background: var(--cream);
+  box-shadow: var(--tile-hairline);
 }
 
 .listing-card__media {
@@ -439,8 +456,10 @@ ul {
 
 .listing-card__meta {
   font-size: 11px;
+  font-weight: 600;
   color: var(--ink-2);
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .empty-state {

@@ -19,6 +19,8 @@
   height: 140px;
   border-radius: var(--radius);
   object-fit: cover;
+  background: var(--cream);
+  box-shadow: var(--tile-hairline);
 }
 
 .create-listing__photo-fallback {

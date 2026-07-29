@@ -105,6 +105,7 @@
   font-weight: 600;
   color: var(--ink-2);
   border-bottom: 2px solid transparent;
+  transition: color 180ms ease, border-color 180ms ease;
 }
 
 .seller-profile__tab.is-active {
@@ -145,6 +146,7 @@
 .review-card__time {
   font-size: 12px;
   color: var(--ink-2);
+  letter-spacing: 0.02em;
 }
 
 .review-card__text {

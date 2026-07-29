@@ -21,6 +21,8 @@
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  background: var(--cream);
+  box-shadow: var(--tile-hairline);
 }
 
 .inbox-row__thumb img {
@@ -71,6 +73,7 @@
 .inbox-row__time {
   font-size: 11px;
   color: var(--ink-2);
+  letter-spacing: 0.02em;
   flex-shrink: 0;
 }
 

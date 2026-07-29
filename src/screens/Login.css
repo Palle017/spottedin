@@ -46,11 +46,12 @@
 
 .login-screen__tabs button {
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--ink-2);
   font-weight: 700;
   padding: 10px;
+  transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
 .login-screen__tabs button.is-active {
