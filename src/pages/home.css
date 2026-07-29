@@ -1,0 +1,57 @@
+/* Home screen styles — owned by the home agent */
+
+.home {
+  padding-top: 12px;
+  padding-bottom: 96px;
+}
+
+.home-search {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.home-promo {
+  width: 100%;
+  background: var(--promo-olive);
+  padding: 14px 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.home-promo-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.home-promo-sub {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.home-greeting {
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+
+.home-greeting-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.home-greeting-sub {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 0 16px;
+}
