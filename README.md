@@ -1,4 +1,4 @@
-# SPOTTED
+# Spottedin
 
 Depop/Poshmark-style pre-loved resale marketplace for India. V1 is a
 production-quality web MVP with seeded demo data (no live backend). Prices in ₹.
@@ -49,4 +49,4 @@ All app state goes through `src/data/store.ts` — components never touch
 ## Deploy
 
 Pushes to `main` build and publish to GitHub Pages via
-`.github/workflows/deploy.yml` (base path `/spotted/`).
+`.github/workflows/deploy.yml` (base path `/spottedin/`).

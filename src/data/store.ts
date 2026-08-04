@@ -30,6 +30,7 @@ import {
   threads as seedThreads,
 } from './seed';
 import { payments } from '../services/payments';
+import { protectionFeeINR as computeProtectionFeeINR } from '../services/checkoutMath';
 import { shipping } from '../services/shipping';
 
 const KEYS = {
@@ -749,12 +750,16 @@ export async function placeOrderFull(input: {
   if (!courier) throw new Error('Selected courier is not available for this address');
 
   const itemINR = input.itemINR && input.itemINR > 0 ? Math.round(input.itemINR) : listing.priceINR;
-  const protectionFeeINR = Math.max(15, Math.round(itemINR * 0.02));
+  const protectionFeeINR = computeProtectionFeeINR(itemINR);
   const shippingFeeINR = courier.feeINR;
   const codFeeINR = input.payMethod === 'cod' ? 40 : 0;
   const totalINR = itemINR + protectionFeeINR + shippingFeeINR + codFeeINR;
 
-  const payment = await payments.createPayment({ amountINR: totalINR, method: input.payMethod });
+  const payment = await payments.createPayment({
+    amountINR: totalINR,
+    method: input.payMethod,
+    checkout: { listingId: input.listingId, courierId: courier.id, address },
+  });
   if (!payment.ok) throw new Error(payment.error);
 
   const placedAt = Date.now();

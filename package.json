@@ -1,12 +1,14 @@
 {
-  "name": "spotted",
+  "name": "spottedin",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Spottedin web frontend — Vite + React 18 + TypeScript",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test \"tests/*.test.ts\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

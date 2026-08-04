@@ -5,6 +5,7 @@ import PriceTag from '../components/PriceTag';
 import EmptyState from '../components/EmptyState';
 import { getAddresses, getDefaultAddress, getListing, placeOrderFull, saveAddress } from '../data/store';
 import { shipping } from '../services/shipping';
+import { protectionFeeINR } from '../services/checkoutMath';
 import type { Address, CourierQuote, Order, PayMethod } from '../data/types';
 import { formatINR } from '../lib/format';
 
@@ -27,10 +28,6 @@ const UPI_APPS: { id: string; label: string; emoji: string }[] = [
 
 const PHONE_RE = /^[6-9]\d{9}$/;
 const PIN_RE = /^\d{6}$/;
-
-function protectionFeeINR(itemINR: number): number {
-  return Math.max(15, Math.round(itemINR * 0.02));
-}
 
 function formatEtaDate(days: number, from: Date = new Date()): string {
   const d = new Date(from);
